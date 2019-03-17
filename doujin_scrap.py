@@ -82,6 +82,7 @@ def getScrapList():
 
 #３つの配列を行列に変換
 def reshape_array(img_list,title_list,circle_list):
+  #numpy配列に変換
   np_img = np.array(img_list)
   np_title = np.array(title_list)
   np_circle = np.array(circle_list)
@@ -99,18 +100,23 @@ def write_excel(list,path):
     ws = wb.active
     
     colum_head = ["画像","タイトル","サークル名"]
-    rows = []
-    rows.append(colum_head)
-    rows.append(list)
+    ws.append(colum_head)
     
+    
+    np_list = np.array(list)
+   
+    print(np_list.shape)
     #全行分
-    for row in rows:
-      ws.append(row)
+    for i in range(0,np_list.shape[0]):
+      for j in range(0,np_list.shape[1]):
+          ws.cell(row=i+2,column=j+1).value = list[i][j]
+          print(list[i-1][j])
         
     
     print("ファイル作成完了")
+    wb.save(path)
     
 [img,title,circle] = getScrapList()
 list = reshape_array(img,title,circle)
-write_excel(list,"C:\work\python\20190301_scrap_practice\doujin_result.xlsx")
+write_excel(list,"doujin_result.xlsx")
 
